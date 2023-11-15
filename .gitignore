@@ -73,5 +73,6 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-#忽略assets
+#忽略Assets文件
 Content/Assets
+
