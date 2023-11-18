@@ -26,7 +26,6 @@ ABlasterCharacter::ABlasterCharacter()
 	
 }
 
-
 void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
