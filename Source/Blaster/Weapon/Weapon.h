@@ -26,11 +26,24 @@ public:
 	AWeapon();
 protected:
 	virtual void BeginPlay() override;
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 
 
 
+
+protected:
+	UFUNCTION()
+	virtual void OnSphereOverlap(
+	UPrimitiveComponent*OverlapperComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult
+	);
+	
 private:
 	UPROPERTY(VisibleAnywhere,Category="Weapon Properties")
 	USkeletalMeshComponent* WeaponMesh;
@@ -38,6 +51,10 @@ private:
 	UPROPERTY(VisibleAnywhere,Category="Weapon Properties")
 	class USphereComponent* AreaSphere;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,Category="Weapon Properties")
 	EWeaponState WeaponState;
+
+	UPROPERTY(VisibleAnywhere,Category="Weapon Properties")
+	class UWidgetComponent* PickupWidget;
+	
 };

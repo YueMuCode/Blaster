@@ -3,7 +3,9 @@
 
 #include "Weapon.h"
 
+#include "Blaster/Character/BlasterCharacter.h"
 #include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -12,7 +14,6 @@ AWeapon::AWeapon()
 	bReplicates=true;//?
 
 	WeaponMesh=CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
-	WeaponMesh->SetupAttachment(RootComponent);
 	SetRootComponent(WeaponMesh);
 
 	//设置武器的碰撞属性  ??
@@ -25,6 +26,10 @@ AWeapon::AWeapon()
 	AreaSphere->SetupAttachment(RootComponent);
 	AreaSphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	AreaSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	//设置提示UI
+	PickupWidget=CreateDefaultSubobject<UWidgetComponent>(TEXT("PickupWidget"));
+	PickupWidget->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -35,6 +40,14 @@ void AWeapon::BeginPlay()
 	{
 		AreaSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		AreaSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,ECollisionResponse::ECR_Overlap);
+	
+		//订阅函数
+		AreaSphere->OnComponentBeginOverlap.AddDynamic(this,&AWeapon::OnSphereOverlap);
+	}
+	
+	if(PickupWidget)
+	{
+		PickupWidget->SetVisibility(false);
 	}
 }
 
@@ -43,5 +56,14 @@ void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlapperComponent, AActor* OtherActor,	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	ABlasterCharacter* BlasterCharacter=Cast<ABlasterCharacter>(OtherActor);
+	if(BlasterCharacter&&PickupWidget)
+	{
+		PickupWidget->SetVisibility(true);
+	}
 }
 
