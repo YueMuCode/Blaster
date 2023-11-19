@@ -36,6 +36,8 @@ AWeapon::AWeapon()
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//如果是在服务端上
 	if(HasAuthority())
 	{
 		AreaSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
@@ -43,6 +45,7 @@ void AWeapon::BeginPlay()
 	
 		//订阅函数
 		AreaSphere->OnComponentBeginOverlap.AddDynamic(this,&AWeapon::OnSphereOverlap);
+		AreaSphere->OnComponentEndOverlap.AddDynamic(this,&AWeapon::OnSphereEndOverlap);
 	}
 	
 	if(PickupWidget)
@@ -61,9 +64,26 @@ void AWeapon::Tick(float DeltaTime)
 void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlapperComponent, AActor* OtherActor,	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ABlasterCharacter* BlasterCharacter=Cast<ABlasterCharacter>(OtherActor);
-	if(BlasterCharacter&&PickupWidget)
+	if(BlasterCharacter)
 	{
-		PickupWidget->SetVisibility(true);
+		BlasterCharacter->SetOverLappingWeapon(this);
+	}
+}
+
+void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlapperComponent, AActor* OtherActor,	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	ABlasterCharacter* BlasterCharacter=Cast<ABlasterCharacter>(OtherActor);
+	if(BlasterCharacter)
+	{
+		BlasterCharacter->SetOverLappingWeapon(nullptr);
+	}
+}
+
+void AWeapon::ShowPickupWidget(bool bShowWidget)
+{
+	if(PickupWidget)
+	{
+		PickupWidget->SetVisibility(bShowWidget);
 	}
 }
 

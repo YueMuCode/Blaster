@@ -1,10 +1,12 @@
 
 #include "BlasterCharacter.h"
 
+#include "Blaster/Weapon/Weapon.h"
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Net/UnrealNetwork.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -28,6 +30,45 @@ ABlasterCharacter::ABlasterCharacter()
 	OverHeadWidget->SetupAttachment(RootComponent);
 }
 
+
+
+void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	//当碰撞到武器时，设置显示UI的条件（服务器还是客户端）
+	DOREPLIFETIME_CONDITION(ABlasterCharacter,OverlappingWeapon,COND_OwnerOnly);//
+}
+
+void ABlasterCharacter::SetOverLappingWeapon(AWeapon* Weapon)
+{
+	if(OverlappingWeapon)
+	{
+		OverlappingWeapon->ShowPickupWidget(false);
+	}
+	
+	//如果是在服务器上
+	OverlappingWeapon=Weapon;
+	if(IsLocallyControlled())
+	{
+		if(OverlappingWeapon)
+		{
+			OverlappingWeapon->ShowPickupWidget(true);
+		}
+	}
+}
+
+void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
+{
+	if(OverlappingWeapon)
+	{
+		OverlappingWeapon->ShowPickupWidget(true);
+	}
+	if(LastWeapon)
+	{
+		LastWeapon->ShowPickupWidget(false);
+	}
+}
 void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
