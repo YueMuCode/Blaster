@@ -11,16 +11,28 @@
 UCombatComponent::UCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;//禁用tick
+
+	BaseWalkSpeed=600.f;
+	AimWalkSpeed=450.f;
 }
 void UCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	if(Character)
+	{
+		Character->GetCharacterMovement()->MaxWalkSpeed=BaseWalkSpeed;
+	}
 }
 
 void UCombatComponent::SetAiming(bool bIsAiming)
 {
 	bAiming=bIsAiming;
 	ServerSetAiming(bIsAiming);
+	if(Character)
+	{
+		Character->GetCharacterMovement()->MaxWalkSpeed=bIsAiming?AimWalkSpeed:BaseWalkSpeed;
+	}
 	
 }
 
@@ -36,6 +48,11 @@ void UCombatComponent::OnRep_EquippedWeapon()
 void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 {
 	bAiming=bIsAiming;
+	//要在服务器中设定速度，不然服务器会覆盖本地
+	if(Character)
+	{
+		Character->GetCharacterMovement()->MaxWalkSpeed=bIsAiming?AimWalkSpeed:BaseWalkSpeed;
+	}
 }
 
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
