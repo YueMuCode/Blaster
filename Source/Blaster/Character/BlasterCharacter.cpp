@@ -1,6 +1,7 @@
 
 #include "BlasterCharacter.h"
 
+#include "Blaster/BlasterComponents/CombatComponent.h"
 #include "Blaster/Weapon/Weapon.h"
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetComponent.h"
@@ -28,6 +29,9 @@ ABlasterCharacter::ABlasterCharacter()
 	
 	OverHeadWidget=CreateDefaultSubobject<UWidgetComponent>(TEXT("OverHeadWidget"));
 	OverHeadWidget->SetupAttachment(RootComponent);
+
+	Combat=CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
+	Combat->SetIsReplicated(true);//？？？
 }
 
 
@@ -39,6 +43,8 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	//当碰撞到武器时，设置显示UI的条件（服务器还是客户端）
 	DOREPLIFETIME_CONDITION(ABlasterCharacter,OverlappingWeapon,COND_OwnerOnly);//
 }
+
+
 
 void ABlasterCharacter::SetOverLappingWeapon(AWeapon* Weapon)
 {
@@ -87,16 +93,25 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	//绑定键Action
 	PlayerInputComponent->BindAction("Jump",IE_Pressed,this,&ABlasterCharacter::Jump);
-
+	PlayerInputComponent->BindAction("Equip",IE_Pressed,this,&ABlasterCharacter::EquipButtonPressed);
 	
 	//绑定输入键Value
 	PlayerInputComponent->BindAxis("MoveForward",this,&ABlasterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight",this,&ABlasterCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn",this,&ABlasterCharacter::Turn);
 	PlayerInputComponent->BindAxis("LookUp",this,&ABlasterCharacter::LookUp);
+
+	
 }
 
-
+void ABlasterCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	if(Combat)
+	{
+		Combat->Character=this;
+	}
+}
 
 
 void ABlasterCharacter::MoveForward(float Value)
@@ -135,5 +150,13 @@ void ABlasterCharacter::Turn(float Value)
 void ABlasterCharacter::LookUp(float Value)
 {
 	AddControllerPitchInput(Value);
+}
+
+void ABlasterCharacter::EquipButtonPressed()
+{
+	if(Combat&&HasAuthority())
+	{
+		Combat->EquipWeapon(OverlappingWeapon);
+	}
 }
 
