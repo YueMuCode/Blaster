@@ -99,7 +99,8 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Jump",IE_Pressed,this,&ABlasterCharacter::Jump);
 	PlayerInputComponent->BindAction("Equip",IE_Pressed,this,&ABlasterCharacter::EquipButtonPressed);
 	PlayerInputComponent->BindAction("Crouch",IE_Pressed,this,&ABlasterCharacter::CrouchButtonPressed);
-	
+	PlayerInputComponent->BindAction("Aim",IE_Pressed,this,&ABlasterCharacter::AimButtonPressed);
+	PlayerInputComponent->BindAction("Aim",IE_Released,this,&ABlasterCharacter::AimButtonRelesed);
 	//绑定输入键Value
 	PlayerInputComponent->BindAxis("MoveForward",this,&ABlasterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight",this,&ABlasterCharacter::MoveRight);
@@ -184,6 +185,22 @@ void ABlasterCharacter::CrouchButtonPressed()
 	
 }
 
+void ABlasterCharacter::AimButtonPressed()
+{
+	if(Combat)
+	{
+		Combat->SetAiming(true);
+	}
+}
+
+void ABlasterCharacter::AimButtonRelesed()
+{
+	if(Combat)
+	{
+		Combat->SetAiming(false);
+	}
+}
+
 //RPC?what that mean?
 void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 {
@@ -196,4 +213,9 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 bool ABlasterCharacter::IsWeaponEquipped()
 {
 	return (Combat&&Combat->EquippedWeapon);
+}
+
+bool ABlasterCharacter::IsAiming()
+{
+	return (Combat&&Combat->bAiming);
 }

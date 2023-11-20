@@ -29,7 +29,8 @@ protected:
 	void LookUp(float Value);
 	void EquipButtonPressed();
 	void CrouchButtonPressed();
-	
+	void AimButtonPressed();
+	void AimButtonRelesed();
 
 private:
 	UPROPERTY(VisibleAnywhere,Category="Camera")
@@ -64,4 +65,6 @@ public:
 	void SetOverLappingWeapon(AWeapon*Weapon);
 
 	bool IsWeaponEquipped();
+
+	bool IsAiming();
 };

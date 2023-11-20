@@ -19,6 +19,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	void SetAiming(bool bIsAiming);
+
+	UFUNCTION(Server,Reliable)
+	void ServerSetAiming(bool bIsAiming);
 
 private:
 	ABlasterCharacter* Character;
@@ -26,5 +30,8 @@ private:
 	//好像是将此变量复制到客户端
 	UPROPERTY(Replicated)
 	AWeapon* EquippedWeapon;
+
+	UPROPERTY(Replicated)
+	bool bAiming;
 	
 };
