@@ -61,4 +61,6 @@ public:
 	virtual void PostInitializeComponents() override;//?
 	
 	void SetOverLappingWeapon(AWeapon*Weapon);
+
+	bool IsWeaponEquipped();
 };

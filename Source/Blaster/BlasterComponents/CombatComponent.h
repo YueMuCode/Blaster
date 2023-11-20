@@ -10,6 +10,9 @@ class BLASTER_API UCombatComponent : public UActorComponent
 public:	
 	UCombatComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)const override;
+	
 	friend class ABlasterCharacter;//朋友类将可以访问此类的所有权限
 
 	void EquipWeapon(class AWeapon* WeaponToEquip);//class在前面起声明的作用
@@ -19,6 +22,9 @@ protected:
 
 private:
 	ABlasterCharacter* Character;
+
+	//好像是将此变量复制到客户端
+	UPROPERTY(Replicated)
 	AWeapon* EquippedWeapon;
 	
 };

@@ -64,6 +64,8 @@ void ABlasterCharacter::SetOverLappingWeapon(AWeapon* Weapon)
 	}
 }
 
+
+
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
 	if(OverlappingWeapon)
@@ -174,4 +176,9 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 	{
 		Combat->EquipWeapon(OverlappingWeapon);
 	}
+}
+
+bool ABlasterCharacter::IsWeaponEquipped()
+{
+	return (Combat&&Combat->EquippedWeapon);
 }
