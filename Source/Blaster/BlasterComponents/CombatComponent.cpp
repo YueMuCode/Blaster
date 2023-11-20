@@ -3,6 +3,7 @@
 
 #include "Blaster/Character/BlasterCharacter.h"
 #include "Blaster/Weapon/Weapon.h"
+#include "Components/SphereComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 
 UCombatComponent::UCombatComponent()
@@ -31,6 +32,5 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	}
 	//装备后设置武器的所有权
 	EquippedWeapon->SetOwner(Character);
-	EquippedWeapon->ShowPickupWidget(false);
 }
 

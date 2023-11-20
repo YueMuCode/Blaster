@@ -49,6 +49,10 @@ private:
 	//组件
 	UPROPERTY(VisibleAnywhere)
 	class UCombatComponent* Combat;
+
+	//????
+	UFUNCTION(Server,Reliable)
+	void ServerEquipButtonPressed();
 	
 public:
 	//
