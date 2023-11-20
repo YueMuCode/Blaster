@@ -32,6 +32,8 @@ ABlasterCharacter::ABlasterCharacter()
 
 	Combat=CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
 	Combat->SetIsReplicated(true);//？？？
+
+	GetCharacterMovement()->NavAgentProps.bCanCrouch=true;
 }
 
 
@@ -96,6 +98,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	//绑定键Action
 	PlayerInputComponent->BindAction("Jump",IE_Pressed,this,&ABlasterCharacter::Jump);
 	PlayerInputComponent->BindAction("Equip",IE_Pressed,this,&ABlasterCharacter::EquipButtonPressed);
+	PlayerInputComponent->BindAction("Crouch",IE_Pressed,this,&ABlasterCharacter::CrouchButtonPressed);
 	
 	//绑定输入键Value
 	PlayerInputComponent->BindAxis("MoveForward",this,&ABlasterCharacter::MoveForward);
@@ -167,6 +170,18 @@ void ABlasterCharacter::EquipButtonPressed()
 			ServerEquipButtonPressed();
 		}
 	}
+}
+
+void ABlasterCharacter::CrouchButtonPressed()
+{
+	if(bIsCrouched)
+	{
+		UnCrouch();
+	}else
+	{
+		Crouch();
+	}
+	
 }
 
 //RPC?what that mean?
