@@ -38,7 +38,10 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	
 	bIsCrouched=BlasterCharacter->bIsCrouched;
 	bAiming=BlasterCharacter->IsAiming();
+	TurningInPlace=BlasterCharacter->GetTurningInPlace();
 
+
+	
 	//Offset Yaw for Strafing
 	FRotator AimRotation=BlasterCharacter->GetBaseAimRotation();//?全局旋转
 	FRotator MovementRotation=UKismetMathLibrary::MakeRotFromX(BlasterCharacter->GetVelocity());//?局部（根据玩家前进方向旋转）

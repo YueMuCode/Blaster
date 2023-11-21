@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Blaster/BlasterTypes/TurningInPlace.h"
 #include "GameFramework/Character.h"
 #include "BlasterCharacter.generated.h"
 
@@ -62,6 +63,11 @@ private:
 	float AO_Yaw;
 	float AO_Pitch;
 	FRotator StartingAimRotation;
+
+	//作用于转身
+	ETurningInPlace TurningInPlace;
+
+	void TurnInPlace(float DeltaTime);
 	
 public:
 	//
@@ -79,5 +85,7 @@ public:
 	FORCEINLINE float GetAO_Pitch() const {return AO_Pitch;}
 
 	AWeapon* GetEquippedWeapon();
+
+	FORCEINLINE ETurningInPlace GetTurningInPlace() const {return TurningInPlace;}
 	
 };

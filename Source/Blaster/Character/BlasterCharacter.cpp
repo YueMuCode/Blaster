@@ -40,9 +40,24 @@ ABlasterCharacter::ABlasterCharacter()
 	//设置于相机的碰撞关系
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera,ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera,ECollisionResponse::ECR_Ignore);
+
+
+	TurningInPlace=ETurningInPlace::ETIP_NotTurning;
 }
 
 
+void ABlasterCharacter::TurnInPlace(float DeltaTime)
+{
+	//UE_LOG(LogTemp,Warning,TEXT("AO_Yaw:%f"),AO_Yaw);
+	if(AO_Yaw>90.f)
+	{
+		TurningInPlace=ETurningInPlace::ETIP_Right;
+	}
+	else if(AO_Yaw<-90.f)
+	{
+		TurningInPlace=ETurningInPlace::ETIP_Left;
+	}
+}
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -223,12 +238,14 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 		FRotator DeltaAimRotation=UKismetMathLibrary::NormalizedDeltaRotator(CurrentAimRotation,StartingAimRotation);
 		AO_Yaw=DeltaAimRotation.Yaw;
 		bUseControllerRotationYaw=false;
+		TurnInPlace(DeltaTime);
 	}
 	if(Speed>0.f||bIsAir)
 	{
 		StartingAimRotation=FRotator(0.f,GetBaseAimRotation().Yaw,0.f);
 		AO_Yaw=0.f;
 		bUseControllerRotationYaw=true;
+		TurningInPlace=ETurningInPlace::ETIP_NotTurning;
 	}
 
 	//这里源码的处理方式与我们的代码有点错误，需要进行修正，不然网络多人传值不正确,原因在于，源码用了无符号的形式存储pitch
