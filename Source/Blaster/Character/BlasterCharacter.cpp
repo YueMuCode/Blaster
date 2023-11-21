@@ -43,6 +43,10 @@ ABlasterCharacter::ABlasterCharacter()
 
 
 	TurningInPlace=ETurningInPlace::ETIP_NotTurning;
+
+	//网络更新频率
+	NetUpdateFrequency=66.f;
+	MinNetUpdateFrequency=33.f;
 }
 
 
