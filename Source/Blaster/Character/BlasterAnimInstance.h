@@ -50,7 +50,12 @@ private:
 
 	FRotator CharacterRotationLastFrame;
 	FRotator CharacterRotation;
-
 	//作用于平滑过渡
 	FRotator DeltaRotation;
+
+	UPROPERTY(BlueprintReadOnly,Category="Movement",meta=(AllowPrivateAccess="true"))
+	float AO_Yaw;
+
+	UPROPERTY(BlueprintReadOnly,Category="Movement",meta=(AllowPrivateAccess="true"))
+	float AO_Pitch;
 };
