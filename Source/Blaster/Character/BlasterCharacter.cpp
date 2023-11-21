@@ -231,7 +231,14 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 		bUseControllerRotationYaw=true;
 	}
 
+	//这里源码的处理方式与我们的代码有点错误，需要进行修正，不然网络多人传值不正确,原因在于，源码用了无符号的形式存储pitch
 	AO_Pitch=GetBaseAimRotation().Pitch;
+	if(AO_Pitch>90.f&&!IsLocallyControlled())
+	{
+		FVector2D InRange(270.f,360.f);
+		FVector2D OutRange(-90,0.f);
+		AO_Pitch=FMath::GetMappedRangeValueClamped(InRange,OutRange,AO_Pitch);
+	}
 }
 
 //RPC?what that mean?
