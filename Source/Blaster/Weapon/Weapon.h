@@ -78,4 +78,6 @@ public:
 	FORCEINLINE USphereComponent*GetAreaSphere() const{return AreaSphere;};
 	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)const override;
+
+	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const {return WeaponMesh;}
 };
