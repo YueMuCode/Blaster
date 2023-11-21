@@ -34,6 +34,9 @@ protected:
 	void AimButtonRelesed();
 	//瞄准偏移参数yaw
 	void AimOffset(float DeltaTime);
+
+	virtual void Jump() override;
+	
 	
 private:
 	UPROPERTY(VisibleAnywhere,Category="Camera")

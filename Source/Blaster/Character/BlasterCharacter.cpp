@@ -40,13 +40,16 @@ ABlasterCharacter::ABlasterCharacter()
 	//设置于相机的碰撞关系
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera,ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera,ECollisionResponse::ECR_Ignore);
-
+	
 
 	TurningInPlace=ETurningInPlace::ETIP_NotTurning;
 
 	//网络更新频率
 	NetUpdateFrequency=66.f;
 	MinNetUpdateFrequency=33.f;
+
+	//设置转身的速度
+	GetCharacterMovement()->RotationRate=FRotator(0.f,0.f,850.f);
 }
 
 
@@ -273,6 +276,18 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 		FVector2D InRange(270.f,360.f);
 		FVector2D OutRange(-90,0.f);
 		AO_Pitch=FMath::GetMappedRangeValueClamped(InRange,OutRange,AO_Pitch);
+	}
+}
+
+void ABlasterCharacter::Jump()
+{
+	if(bIsCrouched)
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Super::Jump();
 	}
 }
 
