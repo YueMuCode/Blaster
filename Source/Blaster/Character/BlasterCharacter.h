@@ -21,7 +21,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
+	void PlayFireMontage(bool bAiming);
 	
 protected:
 	void MoveForward(float Value);
@@ -36,7 +36,8 @@ protected:
 	void AimOffset(float DeltaTime);
 
 	virtual void Jump() override;
-	
+	void FireButtonPressed();
+	void FireButtonReleased();
 	
 private:
 	UPROPERTY(VisibleAnywhere,Category="Camera")
@@ -72,6 +73,9 @@ private:
 	ETurningInPlace TurningInPlace;
 
 	void TurnInPlace(float DeltaTime);
+
+	UPROPERTY(EditAnywhere,Category="Combat")
+	class UAnimMontage* FireWeaponMontage;
 	
 public:
 	//
