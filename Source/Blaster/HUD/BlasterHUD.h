@@ -11,11 +11,11 @@ struct FHUDPackage
 {
 	GENERATED_BODY()
 public:
-	class UTexture2D* CrosshairCenter;
+	class UTexture2D* CrosshairsCenter;
 	UTexture2D* CrosshairsLeft;
 	UTexture2D* CrosshairsRight;
-	UTexture2D* CrosshairTop;
-	UTexture2D* CrosshairBottom;
+	UTexture2D* CrosshairsTop;
+	UTexture2D* CrosshairsBottom;
 	
 };
 
@@ -37,4 +37,6 @@ public:
 
 private:
 	FHUDPackage HUDPackage;
+
+	void DrawCrosshair(UTexture2D* Texture,FVector2D ViewportCenter);
 };
