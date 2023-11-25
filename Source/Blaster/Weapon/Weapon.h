@@ -76,6 +76,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ACasing> CasingClass;
+
+
 public:
 	void ShowPickupWidget(bool bShowWidget);
 	
@@ -88,4 +90,21 @@ public:
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const {return WeaponMesh;}
 
 	virtual void Fire(const FVector& HitTarget);
+
+	//武器准心
+	UPROPERTY(EditAnywhere,Category="Crosshairs")
+	UTexture2D* CrosshairCenter;
+
+	UPROPERTY(EditAnywhere,Category="Crosshairs")
+	UTexture2D* CrosshairsLeft;
+
+	UPROPERTY(EditAnywhere,Category="Crosshairs")
+	UTexture2D* CrosshairsRight;
+
+	UPROPERTY(EditAnywhere,Category="Crosshairs")
+	UTexture2D* CrosshairsTop;
+
+	UPROPERTY(EditAnywhere,Category="Crosshairs")
+	UTexture2D* CrosshairsBottom;
+	
 };

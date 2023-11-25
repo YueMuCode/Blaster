@@ -37,9 +37,13 @@ protected:
 	void MultcastFire(const FVector_NetQuantize& TraceHitTarget);
 
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
+
+	void SetHUDCrosshairs(float DeltaTime);
 	
 private:
 	ABlasterCharacter* Character;
+	class ABlasterPlayerController* Controller;
+	class ABlasterHUD* HUD;
 
 	//好像是将此变量复制到客户端
 	UPROPERTY(ReplicatedUsing=OnRep_EquippedWeapon)
