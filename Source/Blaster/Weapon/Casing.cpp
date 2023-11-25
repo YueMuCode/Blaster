@@ -3,25 +3,38 @@
 
 #include "Casing.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+
 // Sets default values
 ACasing::ACasing()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	CasingMesh=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CasingMesh"));
 	SetRootComponent(CasingMesh);
+	CasingMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera,ECR_Ignore);
+	CasingMesh->SetSimulatePhysics(true);
+	CasingMesh->SetEnableGravity(true);
+	CasingMesh->SetNotifyRigidBodyCollision(true);
+	ShellEjectionImpulse=10.f;
 }
 
 // Called when the game starts or when spawned
 void ACasing::BeginPlay()
 {
 	Super::BeginPlay();
+	CasingMesh->OnComponentHit.AddDynamic(this,&ACasing::OnHit);
+	CasingMesh->AddImpulse(GetActorForwardVector()*ShellEjectionImpulse);
 	
 }
 
-// Called every frame
-void ACasing::Tick(float DeltaTime)
+void ACasing::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
 {
-	Super::Tick(DeltaTime);
-
+	if(ShellSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this,ShellSound,GetActorLocation());
+	}
+	Destroy();
 }
 
