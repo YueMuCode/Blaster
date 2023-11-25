@@ -70,6 +70,10 @@ private:
 	
 	UPROPERTY(VisibleAnywhere,Category="Weapon Properties")
 	class UWidgetComponent* PickupWidget;
+
+	UPROPERTY(EditAnywhere,Category="Weapon Properties")
+	class UAnimationAsset* FireAnimation;
+	
 public:
 	void ShowPickupWidget(bool bShowWidget);
 	
@@ -80,4 +84,6 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps)const override;
 
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const {return WeaponMesh;}
+
+	void Fire();
 };

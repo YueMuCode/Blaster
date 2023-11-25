@@ -109,6 +109,8 @@ void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 	DOREPLIFETIME(AWeapon,WeaponState);
 }
 
+
+
 void AWeapon::OnRep_WeaponState()
 {
 	switch ((WeaponState))
@@ -116,5 +118,14 @@ void AWeapon::OnRep_WeaponState()
 	case EWeaponState::EWS_Equipped:
 		ShowPickupWidget(false);
 		break;
+	}
+}
+
+
+void AWeapon::Fire()
+{
+	if(FireAnimation)
+	{
+		WeaponMesh->PlayAnimation(FireAnimation,false);
 	}
 }
