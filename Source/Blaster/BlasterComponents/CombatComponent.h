@@ -60,6 +60,12 @@ private:
 
 	bool bFireButtonPressed;
 
+	//FVector HitTarget;
+
+	//准心纹理
+	 
+	float CrosshairVelocityFactor;
+	float CrosshairInAirFactor;
 	FVector HitTarget;
 	
 };

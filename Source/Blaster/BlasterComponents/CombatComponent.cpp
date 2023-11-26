@@ -33,6 +33,13 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	SetHUDCrosshairs(DeltaTime);
+	if(Character&&Character->IsLocallyControlled())
+	{
+		FHitResult HitResult;
+		TraceUnderCrosshairs((HitResult));
+		HitTarget=HitResult.ImpactPoint;
+	}
+	
 }
 
 
@@ -150,6 +157,24 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 				HUDPackage.CrosshairsBottom=nullptr;
 				
 			}
+			//计算纹理的抖动
+			FVector2D walkSpeedRange(0.f,Character->GetCharacterMovement()->MaxWalkSpeed);
+			FVector2D VelocityMultiplierRange(0.f,1.f);
+			FVector Velocity=Character->GetVelocity();
+			Velocity.Z=0.f;
+			CrosshairVelocityFactor= FMath::GetMappedRangeValueUnclamped(walkSpeedRange,VelocityMultiplierRange,Velocity.Size());
+
+			 if(Character->GetCharacterMovement()->IsFalling())
+			 {
+				 CrosshairInAirFactor=FMath::FInterpTo(CrosshairInAirFactor,2.25f,DeltaTime,2.25f);
+			 }
+			 else
+			 {
+				 CrosshairInAirFactor=FMath::FInterpTo(CrosshairInAirFactor,0.f,DeltaTime,30.f);
+			 }
+			
+			HUDPackage.CrosshairSpread=CrosshairVelocityFactor+CrosshairInAirFactor;
+			
 			HUD->SetHUDPackage(HUDPackage);
 		}
 	}
